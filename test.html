@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>test</title>
+    <meta charset="utf-8"/>
+    
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+
+    <div id="app">
+      <p v-if="errored">
+        エラーにより取得できませんでした
+      </p>
+      <h3 v-for="lsn in info">{{ lsn.up_date }}</h3>
+      <table class="hanyou">
+        <thead>
+          <tr>
+            <th>講座名</th>
+            <th>申込者数</th>
+            <th>キャンセル待ち</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="lsn in info" class="lsn">
+            <th>{{ lsn.lsn_num }} : {{ lsn.lsn_name }}</th>
+            <th>{{ lsn.num }} （組・名）</th>
+            <th>{{ lsn.cancel }} （組・名）</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+            info: null,
+            errored: false
+        },
+        mounted: function() {
+            var self =  this
+            axios
+            .get('data.json')
+            .then(function(response){ self.info = response.data })
+            .catch(function(error){console.log(error); self.errord = true})
+        }
+      })
+
+      if (navigator.onLine === false) {
+          alert("No internet connection.")
+      }
+    </script>
+  </body>
+</html>
